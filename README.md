@@ -9,7 +9,7 @@ An **Action** is a hook that is triggered at specific time when your code is run
 
 A **Filter** allows you get and modify your returned function data before it is sent to the database or the browser. This can include things like that you have array of data and you want to modify the data before returing it actually.
 
-
+For API docs and examples, see https://godoc.org/github.com/kneskgo/hook
 
 ## Filter Example
 ``` go
