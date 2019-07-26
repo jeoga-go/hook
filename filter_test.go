@@ -8,7 +8,7 @@ import (
 func TestFilter_WithoutArgs(t *testing.T) {
 	f := hook.Filters{}
 	// f.Hello()
-	fFunc1 := func(args *map[string]interface{}) {
+	fFunc1 := func(args map[string]interface{}) {
 		// t.Log("Running ok without orgs")
 	}
 	f.Add("filter1", fFunc1)
@@ -18,10 +18,10 @@ func TestFilter_WithoutArgs(t *testing.T) {
 func TestFilter_MultipleWithSort(t *testing.T) {
 	f := hook.Filters{}
 
-	fFunc1 := func(args *map[string]interface{}) {
+	fFunc1 := func(args map[string]interface{}) {
 		// fmt.Println("Filter 1")
 		// fmt.Println(args)
-		(*args)["Name"] = "a"
+		args["Name"] = "a"
 	}
 	f.Add("filter1", fFunc1)
 
@@ -30,11 +30,11 @@ func TestFilter_MultipleWithSort(t *testing.T) {
 		"priority": 2,
 	}
 
-	fFunc2 := func(args *map[string]interface{}) {
+	fFunc2 := func(args map[string]interface{}) {
 		// fmt.Println("Filter 2")
 		// fmt.Println(args)
 
-		(*args)["Name"] = "b"
+		args["Name"] = "b"
 	}
 	f.Add("filter1", fFunc2, b)
 
@@ -45,7 +45,7 @@ func TestFilter_MultipleWithSort(t *testing.T) {
 		"Name": "Lucifer",
 		"Age":  35,
 	}
-	f.Apply("filter1", &fa)
+	f.Apply("filter1", fa)
 
 	if fa["Name"] != "a" {
 		t.Error(

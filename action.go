@@ -1,7 +1,6 @@
 package hook
 
 import (
-	"log"
 	"sort"
 )
 
@@ -14,18 +13,20 @@ type Action struct {
 	// FunctionArgs map[string]interface{}
 }
 
-// PrioritySorter sorts actions by priority.
-type PrioritySorter []Action
+// PrioritySorterAction sorts actions by priority.
+type PrioritySorterAction []Action
 
-func (a PrioritySorter) Len() int           { return len(a) }
-func (a PrioritySorter) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
-func (a PrioritySorter) Less(i, j int) bool { return a[i].Priority < a[j].Priority }
+func (a PrioritySorterAction) Len() int           { return len(a) }
+func (a PrioritySorterAction) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
+func (a PrioritySorterAction) Less(i, j int) bool { return a[i].Priority < a[j].Priority }
 
 // https://github.com/knesklab/hook/blob/master/class/Action.js
 
-var Actions []Action
+type Actions struct {
+	List []Action
+}
 
-func Add(tag string, funcToAdd func(args map[string]interface{}), args ...map[string]interface{}) {
+func (a *Actions) Add(tag string, funcToAdd func(args map[string]interface{}), args ...map[string]interface{}) {
 
 	// prevent panic: runtime error: index out of range
 	var atts map[string]interface{}
@@ -53,11 +54,11 @@ func Add(tag string, funcToAdd func(args map[string]interface{}), args ...map[st
 		Function: funcToAdd,
 		Priority: priority,
 	}
-	Actions = append(Actions, action)
+	a.List = append(a.List, action)
 	// fmt.Println(Actions)
 }
 
-func Do(tag string, args ...map[string]interface{}) {
+func (a *Actions) Do(tag string, args ...map[string]interface{}) {
 	var atts map[string]interface{}
 	if len(args) != 0 {
 		atts = args[0]
@@ -67,7 +68,7 @@ func Do(tag string, args ...map[string]interface{}) {
 	var filteredActions []Action
 
 	// filter the actions by tag
-	for _, action := range Actions {
+	for _, action := range a.List {
 		// fmt.Println(action)
 		if tag == action.Tag {
 			filteredActions = append(filteredActions, action)
@@ -75,38 +76,42 @@ func Do(tag string, args ...map[string]interface{}) {
 	}
 
 	// sort the filtered actions by priority
-	sort.Sort(PrioritySorter(filteredActions))
-	log.Println("by priority:", filteredActions)
+	sort.Sort(PrioritySorterAction(filteredActions))
+	// log.Println("by priority:", filteredActions)
 
 	for _, action := range filteredActions {
-		action.Function(atts)
+		copyAtts := make(map[string]interface{})
+		for k, v := range atts {
+			copyAtts[k] = v
+		}
+		action.Function(copyAtts)
 	}
 
 }
 
-func RemoveById(id string) {
+func (a *Actions) RemoveByID(id string) {
 	var filteredActions []Action
-	for _, action := range Actions {
+	for _, action := range a.List {
 		if id != action.ID {
 			filteredActions = append(filteredActions, action)
 		}
 	}
-	Actions = filteredActions
+	a.List = filteredActions
 }
 
-func Remove(tag string) {
+func (a *Actions) Remove(tag string) {
 	var filteredActions []Action
 	// filter the actions by tag
-	for _, action := range Actions {
+	for _, action := range a.List {
 		// fmt.Println(action)
 		if tag != action.Tag {
 			filteredActions = append(filteredActions, action)
 		}
 	}
 
-	Actions = filteredActions
+	a.List = filteredActions
 }
 
-func RemoveAll() {
-	Actions = nil
+func (a *Actions) RemoveAll() {
+	a.List = nil
 }

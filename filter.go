@@ -8,7 +8,7 @@ import (
 type Filter struct {
 	ID       string // optional: unique id will generate random if not specified
 	Tag      string // tag name
-	Function func(args *map[string]interface{})
+	Function func(args map[string]interface{})
 	Priority int
 	// FunctionArgs map[string]interface{}
 }
@@ -18,12 +18,12 @@ type Filters struct {
 	List []Filter
 }
 
-// PrioritySorterF sorts filters by priority.
-type PrioritySorterF []Filter
+// PrioritySorterFilter sorts filters by priority.
+type PrioritySorterFilter []Filter
 
-func (a PrioritySorterF) Len() int           { return len(a) }
-func (a PrioritySorterF) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
-func (a PrioritySorterF) Less(i, j int) bool { return a[i].Priority < a[j].Priority }
+func (a PrioritySorterFilter) Len() int           { return len(a) }
+func (a PrioritySorterFilter) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
+func (a PrioritySorterFilter) Less(i, j int) bool { return a[i].Priority < a[j].Priority }
 
 // func (f *Filters) Hello() string {
 // 	fmt.Println("Hello Filter")
@@ -31,7 +31,7 @@ func (a PrioritySorterF) Less(i, j int) bool { return a[i].Priority < a[j].Prior
 // }
 
 // Add new filter struct to the Filters List
-func (f *Filters) Add(tag string, funcToAdd func(args *map[string]interface{}), args ...map[string]interface{}) {
+func (f *Filters) Add(tag string, funcToAdd func(args map[string]interface{}), args ...map[string]interface{}) {
 
 	// prevent panic: runtime error: index out of range
 	var atts map[string]interface{}
@@ -63,13 +63,13 @@ func (f *Filters) Add(tag string, funcToAdd func(args *map[string]interface{}), 
 	// fmt.Println(Filters)
 }
 
-// Execute the filter by specifying the tag name and args
-func (f *Filters) Apply(tag string, args ...*map[string]interface{}) {
+// Apply will execute the filter by specifying the tag name and args
+func (f *Filters) Apply(tag string, args ...map[string]interface{}) {
 	// var atts *map[string]interface{}
 	atts := make(map[string]interface{})
-	atts1 := &atts // atts1 become *map[string]interface{}
+	// atts1 := &atts // atts1 become *map[string]interface{}
 	if len(args) != 0 {
-		atts1 = (args[0]) // updates atts1 value from args[0] *map[string]interface{}
+		atts = (args[0]) // updates atts1 value from args[0] *map[string]interface{}
 	}
 
 	var filteredFilters []Filter
@@ -83,16 +83,16 @@ func (f *Filters) Apply(tag string, args ...*map[string]interface{}) {
 	}
 
 	// sort the filtered Filters by priority
-	sort.Sort(PrioritySorterF(filteredFilters))
+	sort.Sort(PrioritySorterFilter(filteredFilters))
 	// log.Println("by priority:", filteredFilters)
 
 	for _, action := range filteredFilters {
-		action.Function(atts1)
+		action.Function(atts)
 	}
 }
 
-// Remove the filter by ID
-func (f *Filters) RemoveById(id string) {
+// RemoveByID will find filter by id and remove it
+func (f *Filters) RemoveByID(id string) {
 	var filteredFilters []Filter
 	for _, action := range f.List {
 		if id != action.ID {
@@ -116,7 +116,7 @@ func (f *Filters) Remove(tag string) {
 	f.List = filteredFilters
 }
 
-// Remove all filters
+// RemoveAll will remove all filters
 func (f *Filters) RemoveAll() {
 	f.List = nil
 }
