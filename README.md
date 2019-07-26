@@ -51,7 +51,7 @@ outputs:-
 Note: func2 ran before because we did set priority to 2. Default priority is 10
 
 
-### Other Filters Functions
+### Other Filter Functions
 ``` go
 f.RemoveById("b1") // Will remove the filter with ID b1
 f.RemoveByTag("filter1") // will remove all the filter with tag name filter1
@@ -90,13 +90,11 @@ outputs:-
   Func 2 Running
 */
 ```
-Note: func2 ran before because we did set priority to 2. Default priority is 10
 
-
-### Other Actions Functions
+### Other Action Functions
 ``` go
 a.RemoveByID("a1") // will remove the action with ID a1
 a.RemoveByTag("action1") // will remove all the actions with tag name action1
 a.RemoveAll() // will remove all the actions
-a.List will list all the actions
+a.List // will list all the actions
 ```
