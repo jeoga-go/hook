@@ -1,5 +1,5 @@
 
-# hook  [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)]
+# Kneskgo - hook  ![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)
 
 	import "github.com/kneskgo/hook"
 
