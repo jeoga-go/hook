@@ -1,7 +1,7 @@
 
-# Kneskgo - hook  ![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)
+# Hook  ![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)
 
-	import "github.com/kneskgo/hook"
+	import "github.com/khanakiago/hook"
 
 Package hook lets you modify the your own code or function output without actually modifying the underlying code.
 There are two types of hooks exist : actions and filters.
@@ -10,10 +10,10 @@ An **Action** is a hook that is triggered at specific time when your code is run
 
 A **Filter** allows you get and modify your returned function data before it is sent to the database or the browser. This can include things like that you have array of data and you want to modify the data before returing it actually.
 
-For API docs and examples, see https://godoc.org/github.com/kneskgo/hook
+For API docs and examples, see https://godoc.org/github.com/khanakiago/hook
 ## Live Examples
-[Filters - https://play.golang.org/p/72OD-JQKQPm](https://play.golang.org/p/72OD-JQKQPm)<br />
-[Actions - https://play.golang.org/p/cPLOKd1KNTL](https://play.golang.org/p/cPLOKd1KNTL)
+[Filters - https://play.golang.org/p/1rzOiwtUAc0](https://play.golang.org/p/1rzOiwtUAc0)<br />
+[Actions - https://play.golang.org/p/Y8McdPkioHt](https://play.golang.org/p/Y8McdPkioHt)
 
 ## Filter Example
 ``` go
